@@ -27,9 +27,11 @@ function sentenceScorer {
             .forEach(word => {
                 if (freq[word]) score += freq[word];
             });
-        const positionWeight = 1 / (index + 1);
-        score = score * (1 + positionWeight);
-        return { sentence, score };
+            const words = sentence.split(' ').length;
+            if (words > 0) score = score / words;
+            const positionWeight = 1 / (index + 1);
+            score = score * (1 + positionWeight);
+            return { sentence, score };
     });
 }
 
