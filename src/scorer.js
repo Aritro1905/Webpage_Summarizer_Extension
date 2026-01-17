@@ -1,38 +1,41 @@
+// src/scorer.js
+import { STOP_WORDS } from "./stopwords.js";
+
 /**
- * Scores sentences based on word frequency
+ * Scores sentences using word-frequency based NLP
  * @param {string[]} sentences
- * @returns {Object[]} [{ sentence, score }]
+ * @returns {{ sentence: string, score: number }[]}
  */
-import { STOP_WORDS } from "./stopwords";
-function sentenceScorer {
-    const freq = {}
-        sentences.forEach(sentence => {
-        sentence
-            .toLowerCase()
-            .replace(/[^a-z\s]/g, '')
-            .split(' ')
-            .forEach(word => {
-                if (word && !stopWords.has(word)) {
-                    freq[word] = (freq[word] || 0) + 1;
-                }
-            });
-    });
+export function scoreSentences(sentences) {
+  const wordFreq = {};
 
-    return sentences.map(sentence => {
-        let score = 0;
-        sentence
-            .toLowerCase()
-            .replace(/[^a-z\s]/g, '')
-            .split(' ')
-            .forEach(word => {
-                if (freq[word]) score += freq[word];
-            });
-            const words = sentence.split(' ').length;
-            if (words > 0) score = score / words;
-            const positionWeight = 1 / (index + 1);
-            score = score * (1 + positionWeight);
-            return { sentence, score };
+  sentences.forEach(sentence => {
+    const words = sentence
+      .toLowerCase()
+      .match(/\b[a-z]{2,}\b/g);
+
+    if (!words) return;
+
+    words.forEach(word => {
+      if (!STOP_WORDS.has(word)) {
+        wordFreq[word] = (wordFreq[word] || 0) + 1;
+      }
     });
+  });
+
+  return sentences.map(sentence => {
+    let score = 0;
+
+    const words = sentence
+      .toLowerCase()
+      .match(/\b[a-z]{2,}\b/g);
+
+    if (words) {
+      words.forEach(word => {
+        if (wordFreq[word]) score += wordFreq[word];
+      });
+    }
+
+    return { sentence, score };
+  });
 }
-
-export { scoreSentences };

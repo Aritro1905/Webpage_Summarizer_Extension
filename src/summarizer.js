@@ -1,9 +1,6 @@
-import { extractPageText } from './extractor.js';
-import { splitIntoSentences } from './preprocessor.js';
+export function summarizeText(text) {
+  if (!text) return "No content found.";
 
-function getProcessedSentences() {
-    const rawText = extractPageText();
-    return splitIntoSentences(rawText);
+  const sentences = text.split(". ");
+  return sentences.slice(0, 5).join(". ") + ".";
 }
-
-export { getProcessedSentences };

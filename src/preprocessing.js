@@ -1,9 +1,6 @@
-function splitIntoSentences(text) {
-    return text
-        .replace(/\s+/g, ' ')
-        .split(/(?<=[.!?])\s+/)
-        .map(s => s.trim())
-        .filter(s => s.length > 40);
+export function preprocessText(text) {
+  return text
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 5000); // safety limit
 }
-
-export { splitIntoSentences };
